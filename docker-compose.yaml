@@ -5,21 +5,23 @@ services:
       context: .
       dockerfile: ./server/Dockerfile
     ports:
-      - "5000:5000"
+      - "${SERVER_PORT}:${SERVER_PORT}"
     depends_on:
       - db
-    environment:
-      - DATABASE_URL=postgres://postgres:password@db:5432/postgres
+    env_file:
+      - .env
   db:
-    image: postgres:13
+    image: postgres:latest
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=postgres
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     volumes:
       - dbdata:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports: 
-      - "5432:5432"
+      - "${DB_PORT}:${DB_PORT}"
+    env_file:
+      - .env
 volumes:
   dbdata:

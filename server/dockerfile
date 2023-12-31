@@ -5,5 +5,4 @@ COPY server/package.json server/yarn.lock ./
 RUN yarn install
 COPY server/ .
 RUN yarn build
-EXPOSE 5000
 CMD [ "node", "dist/server.js" ]
